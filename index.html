@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChatGPT Animation</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .container {
+    display: flex;
+    height: 90%;
+    width: 90%;
+    max-width: 1200px;
+  }
+
+  .chat-container {
+    flex: 3;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-right: 10px;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .message {
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    display: inline-block;
+    max-width: 70%;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+
+  .user-message {
+    background-color: #e1e1e1;
+    align-self: flex-end;
+  }
+
+  .gpt-message {
+    background-color: #3498db;
+    color: white;
+    align-self: flex-start;
+  }
+
+  .button-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: flex-start;
+    overflow-y: auto;
+    max-height: 100%;
+  }
+
+  .question-group {
+    border: 1px solid #3498db;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .group-header {
+    background-color: #3498db;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .question-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #3498db;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    white-space: normal;
+    overflow-wrap: break-word;
+    width: 100%;
+  }
+
+  .question-button:disabled {
+    background-color: #a5d6a7;
+    cursor: not-allowed;
+  }
+
+  .question-button:hover:not(:disabled) {
+    background-color: #2980b9;
+  }
+
+  .group-content {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+  }
+
+  .search-container {
+    margin-bottom: 10px;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  .reset-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+    align-self: center;
+  }
+
+  .reset-button:hover {
+    background-color: #c0392b;
+  }
+
+  .image-container {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .image-container img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="chat-container" id="chatContainer"></div>
+  <div class="button-container">
+    <div class="search-container">
+      <input type="text" class="search-input" id="searchInput" placeholder="質問を検索..." onkeyup="filterQuestions()">
+    </div>
+    <div class="question-group">
+      <div class="group-header" onclick="toggleGroup(this)">MOD導入方法（初心者向け）</div>
+      <div class="group-content">
+        <button class="question-button" onclick="generateResponse('ScriptHookの導入方法')">ScriptHookの導入方法</button>
+        <button class="question-button" onclick="generateResponse('他の質問例1')">他の質問例1</button>
+      </div>
+    </div>
+    <div class="question-group">
+      <div class="group-header" onclick="toggleGroup(this)">グループ2</div>
+      <div class="group-content">
+        <button class="question-button" onclick="generateResponse('他の質問例2')">他の質問例2</button>
+        <button class="question-button" onclick="generateResponse('他の質問例3')">他の質問例3</button>
+      </div>
+    </div>
+    <button class="reset-button" onclick="resetChat()">リセット</button>
+  </div>
+</div>
+
+<script>
+  const typingSpeed = 10; // タイピング速度を設定（ミリ秒）
+
+  const responses = {
+    'ScriptHookの導入方法': 'ScriptHookは、ゲーム「Grand Theft Auto V (GTA V)」にMODを導入するためのツールです。\n以下の手順に従って、ScriptHookを導入してください。\n\n  ステップ 1: ScriptHookVのダウンロード\n 1. 公式サイトにアクセス: http://www.dev-c.com/gtav/scripthookv/ にアクセスします。\n 2. 最新バージョンをダウンロード: ダウンロードリンクをクリックして、最新のScriptHookVをダウンロードします。ダウンロードされたファイルは通常ZIP形式です。\n\n  ステップ 2: ダウンロードしたファイルの解凍\n 1. ZIPファイルを解凍: ダウンロードしたZIPファイルを解凍します。解凍すると、いくつかのファイルとフォルダが表示されます。\n\n  ステップ 3: ファイルの配置\n 1. GTA Vのインストールフォルダを特定: GTA Vがインストールされているフォルダを見つけます。通常、Steam/steamapps/common/Grand Theft Auto Vのようなパスです。\n 2. ScriptHookVファイルのコピー: 解凍したフォルダ内にあるScriptHookV.dll、dinput8.dll、およびNativeTrainer.asi（オプション）ファイルを、GTA Vのインストールフォルダにコピーします。\n\n  ステップ 4: ゲームの起動と確認\n 1. ゲームを起動: GTA Vを通常どおり起動します。\n 2. 確認: ゲーム内でMODが正しく動作しているか確認します。NativeTrainer.asiを導入した場合、F4キーを押してトレーナーメニューが表示されるかどうかをチェックします。\n\n  注意点\nゲームのバージョンに注意: ScriptHookVは特定のゲームバージョンに対応しているため、GTA Vのアップデート後に動作しない場合があります。その際は、ScriptHookVの最新バージョンを再度ダウンロードしてください。\n オンラインモードでは使用しない: ScriptHookVはシングルプレイヤーモードでのみ使用してください。オンラインモードでの使用は、アカウントがバンされる原因になります。',
+    '他の質問例1': '回答例1\n\nこの回答は改行が含まれています。',
+    '他の質問例2': '回答例2\n\nこちらも改行を含むサンプル回答です。',
+    '他の質問例3': '回答例3\n\n改行の例です。\n次の行になります。',
+  };
+
+  const images = {
+    'ScriptHookの導入方法': 'picture/ScriptHookの導入方法.png',
+    '他の質問例1': null,
+    '他の質問例2': null,
+    '他の質問例3': null, // 画像が必要ない場合はnullを設定
+  };
+
+  function generateResponse(question) {
+    // 全てのボタンを無効化
+    const buttons = document.querySelectorAll('.question-button');
+    buttons.forEach(button => button.disabled = true);
+
+    const chatContainer = document.getElementById("chatContainer");
+
+    // ユーザーメッセージを追加
+    const userMessageDiv = document.createElement("div");
+    userMessageDiv.className = "message user-message";
+    userMessageDiv.textContent = question;
+    chatContainer.appendChild(userMessageDiv);
+
+    // GPTメッセージコンテナを追加
+    const gptMessageDiv = document.createElement("div");
+    gptMessageDiv.className = "message gpt-message";
+    chatContainer.appendChild(gptMessageDiv);
+
+    // チャットコンテナの一番下にスクロール
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    // GPTの回答をアニメーションで表示
+    animateGPTResponse(gptMessageDiv, responses[question], images[question]);
+  }
+
+  function animateGPTResponse(element, response, image) {
+    let i = 0;
+    const typingInterval = setInterval(function() {
+      if (i < response.length) {
+        element.textContent += response.charAt(i);
+        i++;
+      } else {
+        clearInterval(typingInterval);
+        if (image) {
+          displayImage(image);
+        } else {
+          // 全てのボタンを再有効化
+          const buttons = document.querySelectorAll('.question-button');
+          buttons.forEach(button => button.disabled = false);
+        }
+      }
+    }, typingSpeed);
+  }
+
+  function displayImage(imageSrc) {
+    const chatContainer = document.getElementById("chatContainer");
+    const imageContainer = document.createElement("div");
+    imageContainer.className = "image-container";
+    const img = document.createElement("img");
+    img.src = imageSrc;
+    imageContainer.appendChild(img);
+    chatContainer.appendChild(imageContainer);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    // 全てのボタンを再有効化
+    const buttons = document.querySelectorAll('.question-button');
+    buttons.forEach(button => button.disabled = false);
+  }
+
+  function resetChat() {
+    const chatContainer = document.getElementById("chatContainer");
+    chatContainer.innerHTML = '';
+  }
+
+  function toggleGroup(element) {
+    const groupContent = element.nextElementSibling;
+    if (groupContent.style.display === "flex") {
+      groupContent.style.display = "none";
+    } else {
+      groupContent.style.display = "flex";
+    }
+  }
+
+  function filterQuestions() {
+    const searchInput = document.getElementById("searchInput").value.toLowerCase();
+    const buttons = document.querySelectorAll('.question-button');
+    buttons.forEach(button => {
+      if (button.textContent.toLowerCase().includes(searchInput)) {
+        button.style.display = "";
+      } else {
+        button.style.display = "none";
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
