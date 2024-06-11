@@ -173,6 +173,13 @@
       <input type="text" class="search-input" id="searchInput" placeholder="質問を検索..." onkeyup="filterQuestions()">
     </div>
     <div class="question-group">
+        <div class="group-header" onclick="toggleGroup(this)">このツールについて</div>
+        <div class="group-content">
+          <button class="question-button" onclick="generateResponse('このツールは何？')">このツールは何？</button>
+          <button class="question-button" onclick="generateResponse('このツールの使い方')">このツールの使い方</button>
+        </div>
+      </div>
+    <div class="question-group">
       <div class="group-header" onclick="toggleGroup(this)">MOD導入方法（初心者向け）</div>
       <div class="group-content">
         <button class="question-button" onclick="generateResponse('ScriptHookの導入方法')">ScriptHookの導入方法</button>
@@ -194,10 +201,13 @@
   const typingSpeed = 10; // タイピング速度を設定（ミリ秒）
 
   const responses = {
+
+    'このツールは何？': 'このツールはオープンワールドゲームのGTA5のMOD導入をアシストするためにChatGPTを用いて作成されたものです。\n まだベータ版であり、これから項目を追加していくと思います。',
+    'このツールの使い方': '右の欄から気になる項目を選択してください。\n そうするとまるでAIが解凍しているような雰囲気で回答してくれます。（実際この回答にAIは使用していません）',
     'ScriptHookの導入方法': 'ScriptHookは、ゲーム「Grand Theft Auto V (GTA V)」にMODを導入するためのツールです。\n以下の手順に従って、ScriptHookを導入してください。\n\n  ステップ 1: ScriptHookVのダウンロード\n 1. 公式サイトにアクセス: http://www.dev-c.com/gtav/scripthookv/ にアクセスします。\n 2. 最新バージョンをダウンロード: ダウンロードリンクをクリックして、最新のScriptHookVをダウンロードします。ダウンロードされたファイルは通常ZIP形式です。\n\n  ステップ 2: ダウンロードしたファイルの解凍\n 1. ZIPファイルを解凍: ダウンロードしたZIPファイルを解凍します。解凍すると、いくつかのファイルとフォルダが表示されます。\n\n  ステップ 3: ファイルの配置\n 1. GTA Vのインストールフォルダを特定: GTA Vがインストールされているフォルダを見つけます。通常、Steam/steamapps/common/Grand Theft Auto Vのようなパスです。\n 2. ScriptHookVファイルのコピー: 解凍したフォルダ内にあるScriptHookV.dll、dinput8.dll、およびNativeTrainer.asi（オプション）ファイルを、GTA Vのインストールフォルダにコピーします。\n\n  ステップ 4: ゲームの起動と確認\n 1. ゲームを起動: GTA Vを通常どおり起動します。\n 2. 確認: ゲーム内でMODが正しく動作しているか確認します。NativeTrainer.asiを導入した場合、F4キーを押してトレーナーメニューが表示されるかどうかをチェックします。\n\n  注意点\nゲームのバージョンに注意: ScriptHookVは特定のゲームバージョンに対応しているため、GTA Vのアップデート後に動作しない場合があります。その際は、ScriptHookVの最新バージョンを再度ダウンロードしてください。\n オンラインモードでは使用しない: ScriptHookVはシングルプレイヤーモードでのみ使用してください。オンラインモードでの使用は、アカウントがバンされる原因になります。',
-    '他の質問例1': '回答例1\n\nこの回答は改行が含まれています。',
-    '他の質問例2': '回答例2\n\nこちらも改行を含むサンプル回答です。',
-    '他の質問例3': '回答例3\n\n改行の例です。\n次の行になります。',
+    '他の質問例1': '回答例1',
+    '他の質問例2': '回答例2',
+    '他の質問例3': '回答例3',
   };
 
   const images = {
