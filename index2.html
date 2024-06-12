@@ -229,9 +229,9 @@
       <input type="text" class="search-input" id="searchInput" placeholder="質問を検索..." onkeyup="filterQuestions()">
     </div>
     <div class="question-group">
-      <div class="group-header" onclick="toggleGroup(this)">グループ1</div>
+      <div class="group-header" onclick="toggleGroup(this)">GTA5に関する問題</div>
       <div class="group-content">
-        <button class="question-button" onclick="generateResponse('ゲームが起動しない')">ゲームが起動しない</button>
+        <button class="question-button" onclick="generateResponse('ゲームが起動しない（ロード中にクラッシュする）')">ゲームが起動しない（ロード中にクラッシュする）</button>
         <button class="question-button" onclick="generateResponse('他の質問例1')">他の質問例1</button>
       </div>
     </div>
@@ -254,8 +254,8 @@
   const typingSpeed = 20; // タイピング速度を設定（ミリ秒）
 
   const responses = {
-    'ゲームが起動しない': [
-      'PCを再起動してみてください。',
+    'ゲームが起動しない（ロード中にクラッシュする）': [
+      'クラッシュ対策MODが導入されてない場合、以下のMODを導入することで解決刷るかもしれません。\n\n\n Packfile Limit Adjuster\n\nこのMODはGTA5が読み込めるRPFファイルの量を2倍に増やします。\nダウンロード：https://www.gta5-mods.com/tools/packfile-limit-adjuster\n\nこの中のPackfileLimitAdjuster.asiとPackfileLimitAdjuster.iniをGTA5.exeがあるメインフォルダにドラッグアンドドロップしてください。\n\n\nHeapAdjuster\n\nダウンロード：https://www.gta5-mods.com/tools/heapadjuster\n\n解凍し、中に入ってる2つのファイルをGTA5のフォルダに入れてください。\n\n\n Gameconfig \n\n ',
       'それでも解決しない場合、ゲームファイルの整合性を確認してください。',
       'まだ解決しない場合、最新のグラフィックドライバをインストールしてください。',
     ],
