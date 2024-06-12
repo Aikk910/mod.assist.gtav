@@ -164,6 +164,30 @@
       opacity: 1;
     }
   }
+
+  .switch-container {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 100%;
+}
+
+.switch-button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #3498db;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.switch-button:hover {
+  background-color: #2980b9;
+}
+
 </style>
 </head>
 <body>
@@ -197,6 +221,10 @@
     </div>
     <button class="reset-button" onclick="resetChat()">リセット</button>
   </div>
+</div>
+
+<div class="switch-container">
+  <button class="switch-button" onclick="switchPage('index2.html')">Mode: Resolved/unresolved</button>
 </div>
 
 <script>
@@ -303,6 +331,11 @@
       }
     });
   }
+
+  function switchPage(page) {
+  window.location.href = page;
+}
+
 </script>
 
 </body>
