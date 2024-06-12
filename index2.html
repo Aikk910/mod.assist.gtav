@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resolved/unresolved</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .container {
+    display: flex;
+    height: 90%;
+    width: 90%;
+    max-width: 1200px;
+  }
+
+  .chat-container {
+    flex: 3;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-right: 10px;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .message {
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    display: inline-block;
+    max-width: 70%;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+
+  .user-message {
+    background-color: #e1e1e1;
+    align-self: flex-end;
+  }
+
+  .gpt-message {
+    background-color: #3498db;
+    color: white;
+    align-self: flex-start;
+  }
+
+  .button-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: flex-start;
+    overflow-y: auto;
+    max-height: 100%;
+  }
+
+  .question-group {
+    border: 1px solid #3498db;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .group-header {
+    background-color: #3498db;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .question-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #3498db;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    white-space: normal;
+    overflow-wrap: break-word;
+    width: 100%;
+  }
+
+  .question-button:disabled {
+    background-color: #a5d6a7;
+    cursor: not-allowed;
+  }
+
+  .question-button:hover:not(:disabled) {
+    background-color: #2980b9;
+  }
+
+  .group-content {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+  }
+
+  .search-container {
+    margin-bottom: 10px;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  .reset-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+    align-self: center;
+  }
+
+  .reset-button:hover {
+    background-color: #c0392b;
+  }
+
+  .image-container {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .image-container img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .resolve-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .resolve-button, .not-resolved-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .resolve-button {
+    background-color: #2ecc71;
+    color: white;
+  }
+
+  .resolve-button:hover {
+    background-color: #27ae60;
+  }
+
+  .not-resolved-button {
+    background-color: #e67e22;
+    color: white;
+  }
+
+  .not-resolved-button:hover {
+    background-color: #d35400;
+  }
+
+.switch-container {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 100%;
+}
+
+.switch-button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #3498db;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.switch-button:hover {
+  background-color: #2980b9;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="chat-container" id="chatContainer"></div>
+  <div class="button-container">
+    <div class="search-container">
+      <input type="text" class="search-input" id="searchInput" placeholder="質問を検索..." onkeyup="filterQuestions()">
+    </div>
+    <div class="question-group">
+      <div class="group-header" onclick="toggleGroup(this)">グループ1</div>
+      <div class="group-content">
+        <button class="question-button" onclick="generateResponse('ゲームが起動しない')">ゲームが起動しない</button>
+        <button class="question-button" onclick="generateResponse('他の質問例1')">他の質問例1</button>
+      </div>
+    </div>
+    <div class="question-group">
+      <div class="group-header" onclick="toggleGroup(this)">グループ2</div>
+      <div class="group-content">
+        <button class="question-button" onclick="generateResponse('他の質問例2')">他の質問例2</button>
+        <button class="question-button" onclick="generateResponse('他の質問例3')">他の質問例3</button>
+      </div>
+    </div>
+    <button class="reset-button" onclick="resetChat()">リセット</button>
+  </div>
+</div>
+
+<div class="switch-container">
+  <button class="switch-button" onclick="switchPage('index.html')">Mode: Assist</button>
+</div>
+
+<script>
+  const typingSpeed = 20; // タイピング速度を設定（ミリ秒）
+
+  const responses = {
+    'ゲームが起動しない': [
+      'PCを再起動してみてください。',
+      'それでも解決しない場合、ゲームファイルの整合性を確認してください。',
+      'まだ解決しない場合、最新のグラフィックドライバをインストールしてください。',
+    ],
+    '他の質問例1': ['回答例1\n\nこの回答は改行が含まれています。'],
+    '他の質問例2': ['回答例2\n\nこちらも改行を含むサンプル回答です。'],
+    '他の質問例3': ['回答例3\n\n改行の例です。\n次の行になります。'],
+  };
+
+  const images = {
+    'ゲームが起動しない': null, // 画像が必要ない場合はnullを設定
+    '他の質問例1': null,
+    '他の質問例2': null,
+    '他の質問例3': null, // 画像が必要ない場合はnullを設定
+  };
+
+  let currentQuestion = '';
+  let currentStep = 0;
+
+  function generateResponse(question) {
+    // 全てのボタンを無効化
+    const buttons = document.querySelectorAll('.question-button');
+    buttons.forEach(button => button.disabled = true);
+
+    currentQuestion = question;
+    currentStep = 0;
+
+    const chatContainer = document.getElementById("chatContainer");
+
+    // ユーザーメッセージを追加
+    const userMessageDiv = document.createElement("div");
+    userMessageDiv.className = "message user-message";
+    userMessageDiv.textContent = question;
+    chatContainer.appendChild(userMessageDiv);
+
+    // GPTメッセージコンテナを追加
+    const gptMessageDiv = document.createElement("div");
+    gptMessageDiv.className = "message gpt-message";
+    chatContainer.appendChild(gptMessageDiv);
+
+    // チャットコンテナの一番下にスクロール
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    // GPTの回答をアニメーションで表示
+    animateGPTResponse(gptMessageDiv, responses[question][currentStep], images[question]);
+  }
+
+  function animateGPTResponse(element, response, image) {
+    let i = 0;
+    const typingInterval = setInterval(function() {
+      if (i < response.length) {
+        element.textContent += response.charAt(i);
+        i++;
+      } else {
+        clearInterval(typingInterval);
+        if (image) {
+          displayImage(image);
+        }
+        displayResolveButtons();
+      }
+    }, typingSpeed);
+  }
+
+  function displayImage(imagePath) {
+    const chatContainer = document.getElementById("chatContainer");
+    const imageDiv = document.createElement("div");
+    imageDiv.className = "image-container";
+    const img = document.createElement("img");
+    img.src = imagePath;
+    imageDiv.appendChild(img);
+    chatContainer.appendChild(imageDiv);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+
+  function displayResolveButtons() {
+    const chatContainer = document.getElementById("chatContainer");
+    const buttonContainer = document.createElement("div");
+    buttonContainer.className = "resolve-buttons";
+
+    const resolveButton = document.createElement("button");
+    resolveButton.className = "resolve-button";
+    resolveButton.textContent = "解決した";
+    resolveButton.onclick = function() {
+      resolveChat();
+    };
+
+    const notResolvedButton = document.createElement("button");
+    notResolvedButton.className = "not-resolved-button";
+    notResolvedButton.textContent = "解決しなかった";
+    notResolvedButton.onclick = function() {
+      notResolvedChat();
+    };
+
+    buttonContainer.appendChild(resolveButton);
+    buttonContainer.appendChild(notResolvedButton);
+    chatContainer.appendChild(buttonContainer);
+
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+
+  function resolveChat() {
+    alert('回答を終了します。');
+    // 全てのボタンを再有効化
+    const buttons = document.querySelectorAll('.question-button');
+    buttons.forEach(button => button.disabled = false);
+  }
+
+  function notResolvedChat() {
+    currentStep++;
+    if (currentStep < responses[currentQuestion].length) {
+      const chatContainer = document.getElementById("chatContainer");
+      const gptMessageDiv = document.createElement("div");
+      gptMessageDiv.className = "message gpt-message";
+      chatContainer.appendChild(gptMessageDiv);
+
+      animateGPTResponse(gptMessageDiv, responses[currentQuestion][currentStep], null);
+    } else {
+      alert('これ以上の解決策がありません。サポートサーバーで問い合わせてみてください。');
+      // 全てのボタンを再有効化
+      const buttons = document.querySelectorAll('.question-button');
+      buttons.forEach(button => button.disabled = false);
+    }
+  }
+
+  function resetChat() {
+    const chatContainer = document.getElementById("chatContainer");
+    chatContainer.innerHTML = '';
+    // 全てのボタンを再有効化
+    const buttons = document.querySelectorAll('.question-button');
+    buttons.forEach(button => button.disabled = false);
+  }
+
+  function toggleGroup(element) {
+    const groupContent = element.nextElementSibling;
+    if (groupContent.style.display === "flex") {
+      groupContent.style.display = "none";
+    } else {
+      groupContent.style.display = "flex";
+    }
+  }
+
+  function filterQuestions() {
+    const searchInput = document.getElementById("searchInput").value.toLowerCase();
+    const buttons = document.querySelectorAll('.question-button');
+    buttons.forEach(button => {
+      if (button.textContent.toLowerCase().includes(searchInput)) {
+        button.style.display = "";
+      } else {
+        button.style.display = "none";
+      }
+    });
+  }
+
+  function switchPage(page) {
+  window.location.href = page;
+}
+
+function switchPage(page) {
+  window.location.href = page;
+}
+
+
+</script>
+
+</body>
+</html>
