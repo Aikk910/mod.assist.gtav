@@ -232,7 +232,7 @@
       <div class="group-header" onclick="toggleGroup(this)">GTA5に関する問題</div>
       <div class="group-content">
         <button class="question-button" onclick="generateResponse('ゲームが起動しない（ロード中にクラッシュする）')">ゲームが起動しない（ロード中にクラッシュする）</button>
-        <button class="question-button" onclick="generateResponse('他の質問例1')">他の質問例1</button>
+        <button class="question-button" onclick="generateResponse('MODが起動しない（使えない）')">MODが起動しない（使えない）</button>
       </div>
     </div>
     <div class="question-group">
@@ -251,15 +251,20 @@
 </div>
 
 <script>
-  const typingSpeed = 20; // タイピング速度を設定（ミリ秒）
+  const typingSpeed = 10; // アニメーションの速度を設定（ミリ秒）
 
   const responses = {
     'ゲームが起動しない（ロード中にクラッシュする）': [
-      'クラッシュ対策MODが導入されてない場合、以下のMODを導入することで解決刷るかもしれません。\n\n\n Packfile Limit Adjuster\n\nダウンロード：https://www.gta5-mods.com/tools/packfile-limit-adjuster\n\nこの中のPackfileLimitAdjuster.asiとPackfileLimitAdjuster.iniをGTA5.exeがあるメインフォルダにドラッグアンドドロップしてください。\n\n\nHeapAdjuster\n\nダウンロード：https://www.gta5-mods.com/tools/heapadjuster\n\n解凍し、中に入ってる2つのファイルをGTA5のフォルダに入れてください。\n\n\n Gameconfig \n\n ダウンロード：https://www.gta5-mods.com/misc/gta-5-gameconfig-300-cars\n\n中のGta Config v32 for v 1.0.〇〇を開きます。\nFor More Modsを選択し、Stock Traffic (Means Gta base)を選択してください。開くとgameconfig.xmlがあるのでこれをOpenⅣを使用して mods / update / update.rpf / common / data に編集モードをオンにした状態でドラッグアンドドロップしてください。\n\n\nゲームを起動してみてください。',
+      'クラッシュ対策MODが導入されてない場合、以下のMODを導入することで解決刷るかもしれません。\n\n\n Packfile Limit Adjuster\n\nダウンロード：https://www.gta5-mods.com/tools/packfile-limit-adjuster\n\nこの中のPackfileLimitAdjuster.asiとPackfileLimitAdjuster.iniをGTA5.exeがあるメインフォルダにドラッグアンドドロップしてください。\n\n\nHeapAdjuster\n\nダウンロード：https://www.gta5-mods.com/tools/heapadjuster\n\n解凍し、中に入ってる2つのファイルをGTA5のフォルダに入れてください。\n\n\n Gameconfig \n\n ダウンロード：https://www.gta5-mods.com/misc/gta-5-gameconfig-300-cars\n\n中のGta Config v32 for v 1.0.〇〇を開きます。\nFor More Modsを選択し、Stock Traffic (Means Gta base)を選択してください。開くとgameconfig.xmlがあるのでこれをOpenⅣを使用して mods / update / update.rpf / common / data に編集モードをオンにした状態でドラッグアンドドロップしてください。',
       'MODの無効化をしてみて、何が原因なのかを探してみましょう。\n\n\n すべてのMODを無効化\n\n GTA5のフォルダにある「dinput8.dll」というファイルがあると思うので、そのファイルを別の場所に移動するか、「_dinput8.dll」に名前を変更して起動してみてください。\n起動したら何かしらのMODに問題があるということなので、dinput8.dllを元に戻して次の手順に進んでください。\n起動しなかった場合、デフォルトのゲームファイルに問題があるので、整合性を確認してください。\n\n\nmodsファイルも無効化\n\n「mods」フォルダ名を「_mods」に変更して起動してみてください。\n起動した場合、modsフォルダに問題があるということになります。一番最近に入れたMODを抜いてください。また、導入したMODの更新日を確認してください。古すぎると対応してないことでクラッシュしているかもしれません。\n\n\nscripthookの無効化\n\nscripthook.dllを「_scripthook.dll」に変更するか、別の場所に移動させてください。起動した場合、拡張子が「.asi」のMODに問題があるので、最近入れたASIMODを削除してください。\n\n\nscripthookdotnetの無効化\n\nGTA5のフォルダに有るscripthookDotNet.asiを無効化してみましょう。\nScriptHookDotNet.asiを「_ScriptHookDotNet.asi」にして起動してみてください。起動すればScriptsフォルダに入れてるMODに問題があるので、最近に入れたMODを抜いてみてください。\nまた、NativeUIを導入してない場合、クラッシュ関係あるかわかりませんが、導入しときましょう。\n\nダウンロード：https://github.com/Guad/NativeUI/releases\n\nNativeUI.dllをscriptsフォルダにいれるだけで導入できます。',
-      'ウイルス対策ソフトの除外を試してみる\n\n\nGTA5に関するファイルや、ソフトをウイルス対策ソフトから除外させてください。',
+      'GTA5に関するファイルや、ソフトをウイルス対策ソフトから除外させてください。',
+      'GTA5を再インストールしてみてください。また、再インストール時にMODのファイルは削除されないので、手動で削除する必要があります。',
     ],
-    '他の質問例1': ['回答例1\n\nこの回答は改行が含まれています。'],
+    'MODが起動しない（使えない）': [
+      '1. ScriptHookが入っているかの確認\n・・・ScriptHookはMODを動作させるためには必要不可欠なツールなので、必ず導入しましょう\n\nダウンロード：http://www.dev-c.com/gtav/scripthookv/',
+      '2. 前提MODが導入しているかの確認\n・・・その使用したいMODのページやreadme(説明書)を翻訳し、なんのMODを入れていなきゃいけないのかを確認しましょう。SHVDNや、NativeUI、Luaなどが例に上がります。',
+      '3. ウイルス対策ソフトにブロックされてないか確認',
+                       ],
     '他の質問例2': ['回答例2\n\nこちらも改行を含むサンプル回答です。'],
     '他の質問例3': ['回答例3\n\n改行の例です。\n次の行になります。'],
   };
