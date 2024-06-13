@@ -27,26 +27,26 @@ ChatGPTのような回答をしていますが、回答にAIは全く使用し�
 
 _グループを追加する時_
 
-<div class="question-group">
+`<div class="question-group">
       <div class="group-header" onclick="toggleGroup(this)">グループ名</div>
       <div class="group-content">
         <button class="question-button" onclick="generateResponse('質問1')">質問2</button>
         <button class="question-button" onclick="generateResponse('質問2')">質問2</button>
       </div>
-    </div>
+    </div>`
 
 
 _回答を追加する時_
 
-'質問1': '回答1',
-'質問2': '回答2',
+`'質問1': '回答1',
+'質問2': '回答2',`
 ※必ず1行で書き、開業する場合は \n と入れることで改行されます。
 
 
 _回答後に画像ファイルを表示させる時_
 
-'質問1': 〇〇.png,
-'質問2': 〇〇.gif,
+`'質問1': 〇〇.png,
+'質問2': 〇〇.gif,`
 ※何も表示させない場合、nullと設定する　（例'質問1': null,
 
 
@@ -55,32 +55,32 @@ _回答後に画像ファイルを表示させる時_
 
 _グループを追加する時_
 
-<div class="question-group">
+`<div class="question-group">
       <div class="group-header" onclick="toggleGroup(this)">グループ1</div>
       <div class="group-content">
         <button class="question-button" onclick="generateResponse('質問1')">質問1</button>
         <button class="question-button" onclick="generateResponse('質問2')">質問2</button>
       </div>
-    </div>
+    </div>`
 
 
 _回答を追加する時_
 
-'質問1': ['回答例1'],
-'質問2': ['回答例2'],
+`'質問1': ['回答例1'],
+'質問2': ['回答例2'],`
 
 例
-'ゲームが起動しない': [
+`'ゲームが起動しない': [
       'PCを再起動してみてください。',
       'それでも解決しない場合、ゲームファイルの整合性を確認してください。',
       'まだ解決しない場合、最新のグラフィックドライバをインストールしてください。',
-    ],
+    ],`
 
 
  _回答後に画像ファイルを表示する時_
 
- '質問1': 〇〇.png,
- '質問2': null,
+ `'質問1': 〇〇.png,
+ '質問2': null,`
 
 
  
